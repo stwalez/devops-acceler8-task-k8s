@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo-app-{{ .Values.envName }}
+  labels:
+    app: mongodb-{{ .Values.envName }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: mongodb-{{ .Values.envName }}
+  template:
+    metadata:
+      labels:
+        app: mongodb-{{ .Values.envName }}
+    spec:
+      containers:
+      - name: {{ .Values.dbImage.name }}
+        image: {{ .Values.dbImage.repository }}
+        ports:
+        - containerPort: {{ .Values.dbImage.containerPort }}
+        env:
+        - name: MONGO_INITDB_ROOT_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: mongodb-secret-{{ .Values.envName }}
+              key: mongo-root-username
+        - name: MONGO_INITDB_ROOT_PASSWORD
+          valueFrom: 
+            secretKeyRef:
+              name: mongodb-secret-{{ .Values.envName }}
+              key: mongo-root-password
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo-express-{{ .Values.envName }}
+  labels:
+    app: mongo-express-{{ .Values.envName }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: mongo-express-{{ .Values.envName }}
+  template:
+    metadata:
+      labels:
+        app: mongo-express-{{ .Values.envName }}
+    spec:
+      containers:
+      - name: {{ .Values.expressImage.name }}
+        image: {{ .Values.expressImage.name }}
+        ports:
+        - containerPort: {{ .Values.expressImage.containerPort }}
+        env:
+        - name: ME_CONFIG_MONGODB_ADMINUSERNAME
+          valueFrom:
+            secretKeyRef:
+              name: mongodb-secret-{{ .Values.envName }}
+              key: mongo-root-username
+        - name: ME_CONFIG_MONGODB_ADMINPASSWORD
+          valueFrom: 
+            secretKeyRef:
+              name: mongodb-secret-{{ .Values.envName }}
+              key: mongo-root-password
+        - name: ME_CONFIG_MONGODB_SERVER
+          valueFrom: 
+            configMapKeyRef:
+              name: mongodb-configmap-{{ .Values.envName }}
+              key: database_url
