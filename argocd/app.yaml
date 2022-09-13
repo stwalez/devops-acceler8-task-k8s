@@ -11,12 +11,12 @@ spec:
     path: mongo-app
   destination:
     server: https://kubernetes.default.svc
-    namespace: QA
+    namespace: qa
   
   syncPolicy:
     syncOptions:
-      - CreateNamespace=true
+    - CreateNamespace=true
 
-      automated:
-        selfHeal: true
-        prune: true
+    automated:
+      selfHeal: true
+      prune: true
