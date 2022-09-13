@@ -9,7 +9,7 @@ spec:
   source:
     helm:
       valueFiles:
-        - value-uat.yaml
+        - values-uat.yaml
     path: mongo-app-helmchart 
     repoURL: https://github.com/stwalez/devops-acceler8-task-k8s
     targetRevision: HEAD
