@@ -2,15 +2,25 @@
 
 kubectl apply -f mongo-secret.yaml,mongo-service.yaml,mongodb.yaml
 kubectl apply -f mongo-configmap.yaml,mongo-express-service.yaml,mongo-express.yaml 
+kubectl get pods --all-namespaces
+
 
 ### helm chart commands
+helm create mongo-app-helmchart
+
 kubectl create ns dev
 kubectl create ns uat
 kubectl create ns prod
 
-helm upgrade -i -f task-k8s-mongo-app/values-dev.yaml mongo-app-dev task-k8s-mongo-app/ -n dev
-helm upgrade -i -f task-k8s-mongo-app/values-uat.yaml mongo-app-uat task-k8s-mongo-app/ -n uat
-helm upgrade -i -f task-k8s-mongo-app/values-prod.yaml mongo-app-prod task-k8s-mongo-app/ -n prod
+helm upgrade -i -f mongo-app-helmchart/values-dev.yaml mongo-app-dev mongo-app-helmchart/ -n dev
+helm upgrade -i -f mongo-app-helmchart/values-uat.yaml mongo-app-uat mongo-app-helmchart/ -n uat
+helm upgrade -i -f mongo-app-helmchart/values-prod.yaml mongo-app-prod mongo-app-helmchart/ -n prod
+
+helm delete mongo-app-uat -n uat
+helm delete mongo-app-dev -n dev
+helm delete mongo-app-prod -n prod
+
+helm ls --all-namespaces
 
 
 ### Argocd

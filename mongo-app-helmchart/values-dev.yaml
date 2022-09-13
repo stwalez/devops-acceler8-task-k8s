@@ -1,8 +1,8 @@
-# Default values for task-k8s-mongo-app.
+# Default values for mongo-app-helmchart.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-envName: uat
+envName: dev
 
 
 dbImage:
@@ -15,8 +15,8 @@ expressImage:
   name: mongo-express
   image: mongo-express
   containerPort: 8081
-  servicePort: 8082
-  nodePort: 30001
+  servicePort: 8081
+  nodePort: 30000
 
 secret:
   username: bW9uZ29hZG1pbg==
